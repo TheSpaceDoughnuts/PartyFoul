@@ -3,8 +3,8 @@ using System.Collections;
 
 public class PartyPerson : MonoBehaviour {
 
-	private Vector2 _target = Vector2.zero;
-	private bool _hasTarget = false;
+	protected Vector2 _target = Vector2.zero;
+	protected bool _hasTarget = false;
 
 	public Vector2 force;
 	public Vector3 scale;
