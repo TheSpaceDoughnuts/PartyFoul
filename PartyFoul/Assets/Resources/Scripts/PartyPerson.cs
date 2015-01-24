@@ -3,11 +3,12 @@ using System.Collections;
 
 public class PartyPerson : MonoBehaviour {
 
-	private Vector2 _target = Vector2.zero;
-	private bool _hasTarget = false;
+	protected Vector2 _target = Vector2.zero;
+	protected bool _hasTarget = false;
 
 	public Vector2 force;
 	public Vector3 scale;
+	public float arrivalDistance = 0.1f;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +16,6 @@ public class PartyPerson : MonoBehaviour {
 	}
 
 	protected virtual void OnStart() {
-		Debug.Log ("start");
 		gameObject.transform.localScale = scale;
 	}
 
@@ -26,6 +26,8 @@ public class PartyPerson : MonoBehaviour {
 
 	protected virtual void OnUpdate(){
 		SeekTarget();
+
+
 	}
 
 	public void SetTarget(Vector2 target) {
@@ -42,5 +44,25 @@ public class PartyPerson : MonoBehaviour {
 			norm.Scale(force);
 			gameObject.rigidbody2D.AddForce (norm);
 		}
+	}
+
+	public bool AttemptArrival() {
+		if(_hasTarget) {
+			float distance = Distance(gameObject.transform.position, _target);
+			if(distance < arrivalDistance) {
+				_hasTarget = false;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public float Distance(Vector2 start, Vector2 end) {
+		float dx = (end.x - start.x) * (end.x - start.x);
+		float dy = (end.y - start.y) * (end.y - start.y);
+
+		float distance = Mathf.Sqrt (dx + dy);
+
+		return distance;
 	}
 }
