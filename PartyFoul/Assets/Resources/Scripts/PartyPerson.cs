@@ -10,7 +10,6 @@ public class PartyPerson : MonoBehaviour {
 	public Vector2 force;
 	public Vector3 scale;
 	public float arrivalDistance = 0.1f;
-	private const float TEMP_MAGIC_NUMBER_6_5 = 6.5f;
 	private const float DEPTH_PRECISION = 100.0f;
 
 	void Start () {
@@ -41,7 +40,7 @@ public class PartyPerson : MonoBehaviour {
 	void DepthSort()
 	{
 		//the higher up an object is the further it is into the background
-		_spriteRenderer.sortingOrder = (int)-(gameObject.transform.position.y * DEPTH_PRECISION);
+		_spriteRenderer.sortingOrder = (int)-((gameObject.transform.position.y - GameManager.HALF_HEIGHT) * DEPTH_PRECISION);
 	}
 	
 	public void SeekTarget() {

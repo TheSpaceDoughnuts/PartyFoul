@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour {
 
 	public Player player;
 	public int room;
+	public const float HALF_HEIGHT = 3.5f;
+	public const float HALF_WIDTH = 6.5f;
 
 	public static GameManager instance {
 		get {
