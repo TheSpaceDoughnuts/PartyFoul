@@ -4,13 +4,13 @@ using System.Collections;
 public class Player : PartyPerson {
 
 	// Use this for initialization
-	void Start () {
-	
+	protected override void OnStart () {
+		base.OnStart ();
 	}
 
-	protected override void onUpdate ()
+	protected override void OnUpdate ()
 	{
-		base.onUpdate ();
+		base.OnUpdate ();
 		#region WASD Code
 		/*if(Input.GetKey(KeyCode.W)) {
 			input.y += force.y;

@@ -7,18 +7,24 @@ public class PartyPerson : MonoBehaviour {
 	private bool _hasTarget = false;
 
 	public Vector2 force;
+	public Vector3 scale;
 
 	// Use this for initialization
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		onUpdate();
+		OnStart ();
 	}
 
-	protected virtual void onUpdate(){
+	protected virtual void OnStart() {
+		Debug.Log ("start");
+		gameObject.transform.localScale = scale;
+	}
+
+	// Update is called once per frame
+	void Update () {
+		OnUpdate();
+	}
+
+	protected virtual void OnUpdate(){
 		SeekTarget();
 	}
 
