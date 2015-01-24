@@ -1,4 +1,6 @@
-Party Person
-+Public Function to get hasTarget: bool getHasTarget()
-+Public Function to check if reached target: bool reachedTarget()
-+Default values for force and scale, because they are in the editor and default to 0 right now
+Tim Changes
++NPC_Normal
+	+Roam random direction
+	+Backoff of walls and players (monitor for consistency)
+	+Depth Sorting PartyPeople
+	+Protected Variables in party people, like the spriteRenderer component
