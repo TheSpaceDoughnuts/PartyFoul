@@ -2,17 +2,18 @@
 using System.Collections;
 
 public class Player : PartyPerson {
-
+	
 	// Use this for initialization
 	protected override void OnStart () {
 		base.OnStart ();
 	}
-
+	
 	protected override void OnUpdate ()
 	{
 		base.OnUpdate ();
 		#region WASD Code
-		/*if(Input.GetKey(KeyCode.W)) {
+		Vector2 input = new Vector2();
+		if(Input.GetKey(KeyCode.W)) {
 			input.y += force.y;
 		}
 		if(Input.GetKey(KeyCode.S)){
@@ -23,7 +24,9 @@ public class Player : PartyPerson {
 		}
 		if(Input.GetKey(KeyCode.D)) {
 			input.x += force.x;
-		}*/
+		}
+
+		gameObject.rigidbody2D.AddForce (input);
 		#endregion
 		
 		if(Input.GetMouseButtonDown(1)) {
@@ -32,7 +35,7 @@ public class Player : PartyPerson {
 			
 			Vector2 rescale = new Vector2(target.x / Screen.width, 
 			                              target.y / Screen.height);
-			Vector2 size = new Vector2(6.5f, 3.5f);
+			Vector2 size = new Vector2(GameManager.HALF_WIDTH, GameManager.HALF_HEIGHT);
 			Vector2 result = new Vector2(rescale.x * size.x*2,
 			                             rescale.y * size.y*2);
 			result.x -= size.x;
@@ -40,7 +43,7 @@ public class Player : PartyPerson {
 			
 			SetTarget (result);
 		}
-
+		
 		AttemptArrival();
 	}
 }
