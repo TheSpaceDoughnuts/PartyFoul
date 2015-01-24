@@ -1,0 +1,6 @@
+Tim Changes
++NPC_Normal
+	+Roam random direction
+	+Backoff of walls and players (monitor for consistency)
+	+Depth Sorting PartyPeople
+	+Protected Variables in party people, like the spriteRenderer component

@@ -2,12 +2,12 @@
 using System.Collections;
 
 public class Player : PartyPerson {
-
+	
 	// Use this for initialization
 	protected override void OnStart () {
 		base.OnStart ();
 	}
-
+	
 	protected override void OnUpdate ()
 	{
 		base.OnUpdate ();
@@ -40,7 +40,7 @@ public class Player : PartyPerson {
 			
 			SetTarget (result);
 		}
-
+		
 		AttemptArrival();
 	}
 }
