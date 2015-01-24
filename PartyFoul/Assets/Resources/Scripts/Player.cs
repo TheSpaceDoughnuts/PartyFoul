@@ -40,5 +40,7 @@ public class Player : PartyPerson {
 			
 			SetTarget (result);
 		}
+
+		AttemptArrival();
 	}
 }

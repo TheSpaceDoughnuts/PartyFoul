@@ -27,12 +27,7 @@ public class PartyPerson : MonoBehaviour {
 	protected virtual void OnUpdate(){
 		SeekTarget();
 
-		if(_hasTarget) {
-			float distance = Distance(gameObject.transform.position, _target);
-			if(distance < arrivalDistance) {
-				_hasTarget = false;
-			}
-		}
+
 	}
 
 	public void SetTarget(Vector2 target) {
@@ -49,6 +44,17 @@ public class PartyPerson : MonoBehaviour {
 			norm.Scale(force);
 			gameObject.rigidbody2D.AddForce (norm);
 		}
+	}
+
+	public bool AttemptArrival() {
+		if(_hasTarget) {
+			float distance = Distance(gameObject.transform.position, _target);
+			if(distance < arrivalDistance) {
+				_hasTarget = false;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public float Distance(Vector2 start, Vector2 end) {
