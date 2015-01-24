@@ -1,0 +1,4 @@
+Party Person
++Public Function to get hasTarget: bool getHasTarget()
++Public Function to check if reached target: bool reachedTarget()
++Default values for force and scale, because they are in the editor and default to 0 right now
