@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Resources\Scripts\Door.cs" />
      <Compile Include="Assets\Resources\Scripts\PartyPerson.cs" />
      <Compile Include="Assets\Resources\Scripts\Player.cs" />
      <None Include="Assets\Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
