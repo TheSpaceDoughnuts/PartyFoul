@@ -8,6 +8,7 @@ public class PartyPerson : MonoBehaviour {
 
 	public Vector2 force;
 	public Vector3 scale;
+	public float arrivalDistance = 0.1f;
 
 	// Use this for initialization
 	void Start () {
@@ -15,7 +16,6 @@ public class PartyPerson : MonoBehaviour {
 	}
 
 	protected virtual void OnStart() {
-		Debug.Log ("start");
 		gameObject.transform.localScale = scale;
 	}
 
@@ -26,6 +26,13 @@ public class PartyPerson : MonoBehaviour {
 
 	protected virtual void OnUpdate(){
 		SeekTarget();
+
+		if(_hasTarget) {
+			float distance = Distance(gameObject.transform.position, _target);
+			if(distance < arrivalDistance) {
+				_hasTarget = false;
+			}
+		}
 	}
 
 	public void SetTarget(Vector2 target) {
@@ -42,5 +49,14 @@ public class PartyPerson : MonoBehaviour {
 			norm.Scale(force);
 			gameObject.rigidbody2D.AddForce (norm);
 		}
+	}
+
+	public float Distance(Vector2 start, Vector2 end) {
+		float dx = (end.x - start.x) * (end.x - start.x);
+		float dy = (end.y - start.y) * (end.y - start.y);
+
+		float distance = Mathf.Sqrt (dx + dy);
+
+		return distance;
 	}
 }
