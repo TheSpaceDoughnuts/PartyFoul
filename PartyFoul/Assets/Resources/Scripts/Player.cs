@@ -2,10 +2,15 @@
 using System.Collections;
 
 public class Player : PartyPerson {
-	
+
+	private Animator _animator;
+	private int _facing = 0;
+
 	// Use this for initialization
 	protected override void OnStart () {
 		base.OnStart ();
+
+		_animator = this.GetComponent<Animator>();
 	}
 	
 	protected override void OnUpdate ()
@@ -15,16 +20,22 @@ public class Player : PartyPerson {
 		Vector2 input = new Vector2();
 		if(Input.GetKey(KeyCode.W)) {
 			input.y += force.y;
+			_facing = 2;
+			_animator.SetInteger("Direction", 2	);
 		}
 		if(Input.GetKey(KeyCode.S)){
 			input.y -= force.y;
+			_facing = 0;
 		}
 		if(Input.GetKey(KeyCode.A)) {
 			input.x -= force.x;
+			_facing = 1;
 		}
 		if(Input.GetKey(KeyCode.D)) {
 			input.x += force.x;
+			_facing = 3;
 		}
+		_animator.SetInteger("Direction", _facing);
 
 		gameObject.rigidbody2D.AddForce (input);
 		#endregion
