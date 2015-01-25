@@ -21,7 +21,6 @@ public class Player : PartyPerson {
 		if(Input.GetKey(KeyCode.W)) {
 			input.y += force.y;
 			_facing = 2;
-			_animator.SetInteger("Direction", 2	);
 		}
 		if(Input.GetKey(KeyCode.S)){
 			input.y -= force.y;
