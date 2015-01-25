@@ -1,6 +1,13 @@
 Tim Changes
-+NPC_Normal
-	+Roam random direction
-	+Backoff of walls and players (monitor for consistency)
-	+Depth Sorting PartyPeople
-	+Protected Variables in party people, like the spriteRenderer component
++Beer
+	+Added Keg Prefab
+	+Normal Person can now have beer
+	+Fixed wander. Previous mistake; I set target to _direction instead of _position + _direction.
+	+PartyPeople now face the way they are walking
+	+changed depth sorting to use Z instead of renderLayer; better because it applies to children and takes float values.
++Need Assets
+	+Beer Keg
+	+Beer Cup
++Problem
+	+NPCs do not trigger OnCollisionStay with the gameScreen colliders, but only on the X axis.
+		Making the walls dynamic with 10000 mass fixes the issue.

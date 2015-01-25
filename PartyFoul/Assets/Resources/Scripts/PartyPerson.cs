@@ -30,6 +30,7 @@ public class PartyPerson : MonoBehaviour {
 	
 	protected virtual void OnUpdate(){
 		DepthSort();
+        Reorient();
 		SeekTarget();
 	}
 	
@@ -40,8 +41,21 @@ public class PartyPerson : MonoBehaviour {
 	void DepthSort()
 	{
 		//the higher up an object is the further it is into the background
-		_spriteRenderer.sortingOrder = (int)-((gameObject.transform.position.y - GameManager.HALF_HEIGHT) * DEPTH_PRECISION);
+        transform.position = new Vector3(transform.position.x,
+            transform.position.y,
+            gameObject.transform.position.y - GameManager.HALF_HEIGHT);
+		//_spriteRenderer.sortingOrder = (int)-((gameObject.transform.position.y - GameManager.HALF_HEIGHT) * DEPTH_PRECISION);
 	}
+    /// <summary>
+    /// Make sure the person is facing the way they are moving
+    /// </summary>
+    void Reorient()
+    {
+        float direction = -Mathf.Sign(rigidbody2D.velocity.x);
+        if (direction == 0)
+            return;
+        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * direction, transform.localScale.y, transform.localScale.z);
+    }
 	
 	public void SeekTarget() {
 		if(_hasTarget) {
@@ -66,10 +80,10 @@ public class PartyPerson : MonoBehaviour {
 	}
 	
 	public float Distance(Vector2 start, Vector2 end) {
-		float dx = (end.x - start.x) * (end.x - start.x);
-		float dy = (end.y - start.y) * (end.y - start.y);
+        float dx = (end.x - start.x);
+        float dy = (end.y - start.y);
 		
-		float distance = Mathf.Sqrt (dx + dy);
+		float distance = Mathf.Sqrt (dx * dx + dy * dy);
 		
 		return distance;
 	}
