@@ -1,14 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
 	private static GameManager _instance;
 
 	public Player player;
-	public int room;
+	public Text beerText, funText;
+
+	public string lastRoom = "MainMenu";
 	public const float HALF_HEIGHT = 3.5f;
 	public const float HALF_WIDTH = 6.5f;
+
+	public float currentBeer = 0.0f;
+	public float maxBeer = 100.0f;
+
+	public float currentFun = 0.0f;
+	public float maxFun = 100.0f;
 
 	public static GameManager instance {
 		get {
@@ -22,10 +31,11 @@ public class GameManager : MonoBehaviour {
 			return _instance;
 		}
 	}
-
+	
 	void Awake() {
 		if(_instance == null) {
 			_instance = this;
+			_instance.lastRoom = "MainMenu";
 			DontDestroyOnLoad(this);
 		}
 		else {
@@ -33,5 +43,34 @@ public class GameManager : MonoBehaviour {
 				Destroy(this.gameObject);
 			}
 		}
+	}
+
+	void Update() {
+		AddBeer (0.01f);
+		AddFun (0.01f);
+	}
+
+	public void UpdateBeerText() {
+		instance.beerText.text = "Beer: " + ((instance.currentBeer/instance.maxBeer)*100) + "%";
+	}
+
+	public void UpdateFunText() {
+		instance.funText.text = "Fun: " + ((instance.currentFun/instance.maxFun)*100) + "%";
+	}
+
+	public void AddBeer(float beerAmount) {
+		instance.currentBeer += beerAmount;
+		if(instance.currentBeer > instance.maxBeer)
+			instance.currentBeer = instance.maxBeer;
+
+		UpdateBeerText ();
+	}
+
+	public void AddFun(float funAmount) {
+		instance.currentFun += funAmount;
+		if(instance.currentFun > instance.maxFun)
+			instance.currentFun = instance.maxFun;
+		
+		UpdateFunText();
 	}
 }
