@@ -56,4 +56,9 @@ public class Player : PartyPerson {
 		
 		AttemptArrival();
 	}
+
+	void OnLevelWasLoaded(int level) {
+		GameObject loadPoint = GameObject.Find (GameManager.instance.lastRoom);
+		this.gameObject.transform.position = loadPoint.gameObject.transform.position;
+	}
 }

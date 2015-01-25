@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour {
 	private static GameManager _instance;
 
 	public Player player;
-	public int room;
+	public string lastRoom;
 	public const float HALF_HEIGHT = 3.5f;
 	public const float HALF_WIDTH = 6.5f;
 
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour {
 			return _instance;
 		}
 	}
-
+	
 	void Awake() {
 		if(_instance == null) {
 			_instance = this;
