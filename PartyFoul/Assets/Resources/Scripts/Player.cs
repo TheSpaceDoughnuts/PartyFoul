@@ -5,6 +5,7 @@ public class Player : PartyPerson {
 
 	private Animator _animator;
 	private int _facing = 0;
+	private int _lastFacing = 0;
 
 	// Use this for initialization
 	protected override void OnStart () {
@@ -20,24 +21,41 @@ public class Player : PartyPerson {
 		Vector2 input = new Vector2();
 		if(Input.GetKey(KeyCode.W)) {
 			input.y += force.y;
-			_facing = 2;
 		}
 		if(Input.GetKey(KeyCode.S)){
 			input.y -= force.y;
-			_facing = 0;
 		}
 		if(Input.GetKey(KeyCode.A)) {
 			input.x -= force.x;
-			_facing = 1;
 		}
 		if(Input.GetKey(KeyCode.D)) {
 			input.x += force.x;
-			_facing = 3;
 		}
-		_animator.SetInteger("Direction", _facing);
 
 		gameObject.rigidbody2D.AddForce (input);
 		#endregion
+
+		if(this.gameObject.rigidbody2D.velocity.x > 0 && Mathf.Abs (this.gameObject.rigidbody2D.velocity.y) < 0.7f) {
+			_facing = 3;
+		}
+		if(this.gameObject.rigidbody2D.velocity.x < 0 && Mathf.Abs (this.gameObject.rigidbody2D.velocity.y) < 0.7f) {
+			_facing = 1;
+		}
+		if(this.gameObject.rigidbody2D.velocity.y > 0 && Mathf.Abs (this.gameObject.rigidbody2D.velocity.x) < 0.7f) {
+			_facing = 2;
+		}
+		if(this.gameObject.rigidbody2D.velocity.y < 0 && Mathf.Abs (this.gameObject.rigidbody2D.velocity.x) < 0.7f) {
+			_facing = 0;
+		}
+
+		_lastFacing = _facing;
+
+		if(this.gameObject.rigidbody2D.velocity.y == 0 && this.gameObject.rigidbody2D.velocity.x == 0) {
+			_animator.SetBool ("Idle", true);
+		} else {
+			_animator.SetBool ("Idle", false);
+			_animator.SetInteger("Direction", _facing);
+		}
 		
 		if(Input.GetMouseButtonDown(1)) {
 			//1280x720
