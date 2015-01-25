@@ -7,6 +7,8 @@ public class Player : PartyPerson {
 	private int _facing = 0;
 	private int _lastFacing = 0;
 
+	public GameObject kegPrefab;
+
 	// Use this for initialization
 	protected override void OnStart () {
 		base.OnStart ();
@@ -57,27 +59,33 @@ public class Player : PartyPerson {
 			_animator.SetBool ("Idle", false);
 			_animator.SetInteger("Direction", _facing);
 		}
-		
+
 		if(Input.GetMouseButtonDown(1)) {
-			//1280x720
-			Vector2 target = Input.mousePosition;
-			
-			Vector2 rescale = new Vector2(target.x / Screen.width, 
-			                              target.y / Screen.height);
-			Vector2 size = new Vector2(GameManager.HALF_WIDTH, GameManager.HALF_HEIGHT);
-			Vector2 result = new Vector2(rescale.x * size.x*2,
-			                             rescale.y * size.y*2);
-			result.x -= size.x;
-			result.y -= size.y;
-			
-			SetTarget (result);
+			Vector2 scaledMouse = GetScaledMouseLocation();
+			Vector3 position = new Vector3(scaledMouse.x + Camera.main.transform.position.x, scaledMouse.y + Camera.main.transform.position.y, 0);
+			GameObject keg = Instantiate(kegPrefab, position, Quaternion.identity) as GameObject;
+			GameManager.DepthSort(keg);
 		}
 		
 		AttemptArrival();
 	}
-
+	
 	void OnLevelWasLoaded(int level) {
 		GameObject loadPoint = GameObject.Find (GameManager.instance.lastRoom);
 		this.gameObject.transform.position = loadPoint.gameObject.transform.position;
+	}
+
+	public Vector2 GetScaledMouseLocation() {
+		Vector2 target = Input.mousePosition;
+		
+		Vector2 rescale = new Vector2(target.x / Screen.width, 
+		                              target.y / Screen.height);
+		Vector2 size = new Vector2(GameManager.HALF_WIDTH, GameManager.HALF_HEIGHT);
+		Vector2 result = new Vector2(rescale.x * size.x*2,
+		                             rescale.y * size.y*2);
+		result.x -= size.x;
+		result.y -= size.y;
+		
+		return result;
 	}
 }
