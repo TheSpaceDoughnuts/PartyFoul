@@ -41,6 +41,7 @@ public class NPC_Normal : PartyPerson {
         _funIcon.transform.SetParent(gameObject.transform);
         _funIcon.transform.localPosition = Vector2.zero;
         _happyFace = _funIcon.transform.GetChild(0).gameObject;
+		_happyFace.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         _sadFace = _funIcon.transform.GetChild(1).gameObject;
         _sadFace.SetActive(false);
         _happyFace.SetActive(false);
@@ -141,7 +142,7 @@ public class NPC_Normal : PartyPerson {
             _funElapsed = 0;
             _happyFace.SetActive(true);
             _sadFace.SetActive(false);
-            GameManager.instance.UpdateFunText();
+			GameManager.instance.UpdateFunPercentage();
         }
     }
 
@@ -224,7 +225,7 @@ public class NPC_Normal : PartyPerson {
     {
         _hasBeer = false;
         //Remove Beer from global beer reservoir
-        //GameManager.instance.AddBeer(-1);
+        GameManager.instance.RemoveBeer(1);
         _beerIcon.SetActive(false);
         _beerElapsed = 0;
         _beerTarget = null;

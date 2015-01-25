@@ -55,15 +55,19 @@ public class RoomController : MonoBehaviour {
 	}
 
 	public int GetHavingFunCount() {
-		int count  = 0;
-		foreach(GameObject npc in _normals) {
-			if(npc.GetComponent<NPC_Normal>().HasFun)
-				count++;
+		if(_loaded) {
+			int count  = 0;
+			foreach(GameObject npc in _normals) {
+				if(npc.GetComponent<NPC_Normal>().HasFun)
+					count++;
+			}
+			return count;
 		}
-		return count;
+		return 0;
 	}
 
 	public int GetNPCCount() {
+		if(!_loaded) return 0;
 		return _normals.Count;
 	}
 

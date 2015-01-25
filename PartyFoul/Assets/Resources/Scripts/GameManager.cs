@@ -94,14 +94,20 @@ public class GameManager : MonoBehaviour {
     public void UpdateFunPercentage()
     {
         _funPercentage = (float)TotalFun() / (float)TotalNPCs();
+		Debug.Log (_funPercentage);
+		UpdateFunText();
     }
 
     public void AddBeer(float beerAmount)
     {
 		instance.currentBeer += beerAmount;
-		if(instance.currentBeer > instance.maxBeer)
-			instance.currentBeer = instance.maxBeer;
 
+		UpdateBeerText ();
+	}
+
+	public void RemoveBeer(float beerAmount) {
+		instance.currentBeer -= beerAmount;
+		
 		UpdateBeerText ();
 	}
 }
