@@ -45,7 +45,32 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public static void UpdateBeerText() {
-		//_instance.beerText;
+	void Update() {
+		AddBeer (0.01f);
+		AddFun (0.01f);
+	}
+
+	public void UpdateBeerText() {
+		instance.beerText.text = "Beer: " + ((instance.currentBeer/instance.maxBeer)*100) + "%";
+	}
+
+	public void UpdateFunText() {
+		instance.funText.text = "Fun: " + ((instance.currentFun/instance.maxFun)*100) + "%";
+	}
+
+	public void AddBeer(float beerAmount) {
+		instance.currentBeer += beerAmount;
+		if(instance.currentBeer > instance.maxBeer)
+			instance.currentBeer = instance.maxBeer;
+
+		UpdateBeerText ();
+	}
+
+	public void AddFun(float funAmount) {
+		instance.currentFun += funAmount;
+		if(instance.currentFun > instance.maxFun)
+			instance.currentFun = instance.maxFun;
+		
+		UpdateFunText();
 	}
 }
