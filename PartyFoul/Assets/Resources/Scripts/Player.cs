@@ -50,7 +50,7 @@ public class Player : PartyPerson {
 
 		_lastFacing = _facing;
 
-		if(this.gameObject.rigidbody2D.velocity.y == 0 && this.gameObject.rigidbody2D.velocity.x == 0) {
+		if(Mathf.Abs(this.gameObject.rigidbody2D.velocity.y) <= 0.5f && Mathf.Abs(this.gameObject.rigidbody2D.velocity.x) <= 0.5f) {
 			_animator.SetBool ("Idle", true);
 		} else {
 			_animator.SetBool ("Idle", false);
