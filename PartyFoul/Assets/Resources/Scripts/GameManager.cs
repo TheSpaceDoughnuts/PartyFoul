@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
 
 	public float currentBeer = 0.0f;
 	public float maxBeer = 100.0f;
+    private float _funPercentage;
 
 	public List<RoomController> rooms;
 	public List<Sprite> possibleNPCTexture;
@@ -69,10 +70,34 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void UpdateFunText() {
-		//instance.funText.text = "Fun: " + ((instance.currentFun/instance.maxFun)*100) + "%";
+		instance.funText.text = "Fun: " + (_funPercentage * 100) + "%";
 	}
 
-	public void AddBeer(float beerAmount) {
+    public int TotalNPCs()
+    {
+        int count = 0;
+        foreach (RoomController room in rooms)
+        {
+            count += room.GetNPCCount();
+        }
+        return count;
+    }
+    public int TotalFun()
+    {
+        int count = 0;
+        foreach (RoomController room in rooms)
+        {
+            count += room.GetHavingFunCount();
+        }
+        return count;
+    }
+    public void UpdateFunPercentage()
+    {
+        _funPercentage = (float)TotalFun() / (float)TotalNPCs();
+    }
+
+    public void AddBeer(float beerAmount)
+    {
 		instance.currentBeer += beerAmount;
 		if(instance.currentBeer > instance.maxBeer)
 			instance.currentBeer = instance.maxBeer;

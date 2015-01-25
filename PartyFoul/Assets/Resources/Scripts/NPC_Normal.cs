@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class NPC_Normal : PartyPerson {
     //private
@@ -17,6 +18,8 @@ public class NPC_Normal : PartyPerson {
     private GameObject _funIcon;
     private GameObject _happyFace;
     private GameObject _sadFace;
+    //protected
+    protected RoomController _room;
     //public
 	public float waitTargetTime = 1;
     public float wanderDistance = 0.5f;
@@ -42,7 +45,6 @@ public class NPC_Normal : PartyPerson {
         _sadFace.SetActive(false);
         _happyFace.SetActive(false);
 
-        _beerTarget = GameObject.Find("NPC");
         Debug.Log("Target after beer: " + _beerTarget);
     }
 
@@ -88,6 +90,7 @@ public class NPC_Normal : PartyPerson {
             _hasFun = false;
             _happyFace.SetActive(false);
             //_sadFace.SetActive(true);
+            GameManager.instance.UpdateFunText();
         }
     }
 
@@ -138,6 +141,7 @@ public class NPC_Normal : PartyPerson {
             _funElapsed = 0;
             _happyFace.SetActive(true);
             _sadFace.SetActive(false);
+            GameManager.instance.UpdateFunText();
         }
     }
 
@@ -165,6 +169,19 @@ public class NPC_Normal : PartyPerson {
                 WanderTowards(dir, Mathf.Min(len, wanderDistance));
             }
         }
+        else
+        {
+            if (_room != null)
+            {
+                List<GameObject> npcs = _room.GetNormalNPCs();
+                int rand = Random.Range(0, npcs.Count);
+                _beerTarget = npcs[rand];
+            }
+            else
+            {
+                Debug.Log("NPC not assigned to room!");
+            }
+        }
     }
 
     void OnCollisionStay2D(Collision2D info)
@@ -175,11 +192,11 @@ public class NPC_Normal : PartyPerson {
             if (_elapsedTime > 0.1f)
                 ForceArrive();
         }
-        if (info.gameObject.name == "Beer")
+        if (info.gameObject.tag == "Beer")
         {
             RecieveBeer();
         }
-        else if (info.gameObject.name == "NPC")
+        else if (info.gameObject.tag == "NPC")
         {
             if (_hasBeer)
             {
@@ -210,6 +227,7 @@ public class NPC_Normal : PartyPerson {
         //GameManager.instance.AddBeer(-1);
         _beerIcon.SetActive(false);
         _beerElapsed = 0;
+        _beerTarget = null;
     }
 
     void ResetWaitTimer()
@@ -219,6 +237,11 @@ public class NPC_Normal : PartyPerson {
         Debug.Log("Progress: " + _wanderProgress + ", HeadStart: " + inverseProgress);
         float dampenHeadStart = 0.5f;
         _elapsedTime = Mathf.Max(inverseProgress * waitTargetTime * dampenHeadStart, 0);
+    }
+
+    public void SetRoom(RoomController room)
+    {
+        _room = room;
     }
 
 	void Wander()

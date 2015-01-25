@@ -44,6 +44,8 @@ public class RoomController : MonoBehaviour {
 					normal.GetComponent <SpriteRenderer>().sprite = GameManager.instance.possibleNPCTexture[Random.Range (0, GameManager.instance.possibleNPCTexture.Count-1)];
 					DontDestroyOnLoad(normal);
 					_normals.Add (normal);
+                    NPC_Normal npc = normal.GetComponent<NPC_Normal>();
+                    npc.SetRoom(this);
 				}
 				_loaded = true;
 			} else {
