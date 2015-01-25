@@ -12,6 +12,7 @@ public class Player : PartyPerson {
 		base.OnStart ();
 
 		_animator = this.GetComponent<Animator>();
+		DontDestroyOnLoad(this);
 	}
 	
 	protected override void OnUpdate ()
