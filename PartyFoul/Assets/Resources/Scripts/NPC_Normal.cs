@@ -175,11 +175,11 @@ public class NPC_Normal : PartyPerson {
             if (_elapsedTime > 0.1f)
                 ForceArrive();
         }
-        if (info.gameObject.name == "Beer")
+        if (info.gameObject.tag == "Beer")
         {
             RecieveBeer();
         }
-        else if (info.gameObject.name == "NPC")
+        else if (info.gameObject.tag == "NPC")
         {
             if (_hasBeer)
             {
