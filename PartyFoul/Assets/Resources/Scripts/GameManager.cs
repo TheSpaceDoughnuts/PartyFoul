@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
@@ -16,8 +17,8 @@ public class GameManager : MonoBehaviour {
 	public float currentBeer = 0.0f;
 	public float maxBeer = 100.0f;
 
-	public float currentFun = 0.0f;
-	public float maxFun = 100.0f;
+	public List<RoomController> rooms;
+	public List<Sprite> possibleNPCTexture;
 
 	public static GameManager instance {
 		get {
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour {
 		if(target.collider != null){
 			y = target.collider.bounds.min.y;
 		}
+		y -= Camera.main.transform.position.y;
 		//the higher up an object is the further it is into the background
 		target.transform.position = new Vector3(target.transform.position.x,
 		                                        target.transform.position.y,
@@ -67,7 +69,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void UpdateFunText() {
-		instance.funText.text = "Fun: " + ((instance.currentFun/instance.maxFun)*100) + "%";
+		//instance.funText.text = "Fun: " + ((instance.currentFun/instance.maxFun)*100) + "%";
 	}
 
 	public void AddBeer(float beerAmount) {
@@ -76,13 +78,5 @@ public class GameManager : MonoBehaviour {
 			instance.currentBeer = instance.maxBeer;
 
 		UpdateBeerText ();
-	}
-
-	public void AddFun(float funAmount) {
-		instance.currentFun += funAmount;
-		if(instance.currentFun > instance.maxFun)
-			instance.currentFun = instance.maxFun;
-		
-		UpdateFunText();
 	}
 }
