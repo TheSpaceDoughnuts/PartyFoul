@@ -36,6 +36,8 @@ public class GameManager : MonoBehaviour {
 		if(_instance == null) {
 			_instance = this;
 			_instance.lastRoom = "MainMenu";
+			UpdateBeerText ();
+			UpdateFunText ();
 			DontDestroyOnLoad(this);
 		}
 		else {
@@ -46,8 +48,18 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void Update() {
-		AddBeer (0.01f);
-		AddFun (0.01f);
+			
+	}
+
+	public static void DepthSort(GameObject target) {
+		float y = target.transform.position.y;
+		if(target.collider != null){
+			y = target.collider.bounds.min.y;
+		}
+		//the higher up an object is the further it is into the background
+		target.transform.position = new Vector3(target.transform.position.x,
+		                                        target.transform.position.y,
+		                                        y - GameManager.HALF_HEIGHT);
 	}
 
 	public void UpdateBeerText() {

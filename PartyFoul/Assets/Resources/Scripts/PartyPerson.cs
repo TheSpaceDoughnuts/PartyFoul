@@ -29,8 +29,8 @@ public class PartyPerson : MonoBehaviour {
 	}
 	
 	protected virtual void OnUpdate(){
-		DepthSort();
-        Reorient();
+		GameManager.DepthSort(this.gameObject);
+        //Reorient();
 		SeekTarget();
 	}
 	
@@ -38,14 +38,7 @@ public class PartyPerson : MonoBehaviour {
 		_target = target;
 		_hasTarget = true;
 	}
-	void DepthSort()
-	{
-		//the higher up an object is the further it is into the background
-        transform.position = new Vector3(transform.position.x,
-            transform.position.y,
-            gameObject.transform.position.y - GameManager.HALF_HEIGHT);
-		//_spriteRenderer.sortingOrder = (int)-((gameObject.transform.position.y - GameManager.HALF_HEIGHT) * DEPTH_PRECISION);
-	}
+
     /// <summary>
     /// Make sure the person is facing the way they are moving
     /// </summary>

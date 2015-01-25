@@ -5,6 +5,7 @@ public class NPC_Normal : PartyPerson {
     //private
     private Vector2 lastDirection = Vector2.zero;
     private bool _hasBeer;
+	private bool _hasFun;
     private float _elapsedTime;
     private float _wanderProgress;
     private Object _beerIconRes;
@@ -81,8 +82,13 @@ public class NPC_Normal : PartyPerson {
 
     void RecieveBeer()
     {
+		if(_hasBeer)
+			return;
+
         _hasBeer = true;
+		_hasFun = true;
         _beerIcon.SetActive(true);
+		GameManager.instance.AddBeer (1);
     }
 
     void ResetWaitTimer()
@@ -109,5 +115,13 @@ public class NPC_Normal : PartyPerson {
         target.y += dirScaled.y;
         SetTarget(target);
 		lastDirection = direction;
+	}
+
+	public bool HasFun {
+		get { return _hasFun; }
+	}
+
+	public bool HasBeer {
+		get {return _hasBeer; }
 	}
 }
