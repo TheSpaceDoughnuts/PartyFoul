@@ -30,15 +30,16 @@ public class RoomController : MonoBehaviour {
 		if(Application.loadedLevelName == roomName) {
 			_cameraPosition = Camera.main.transform.position;
 			if(!_loaded) {
+				GameObject spawn = GameObject.FindGameObjectWithTag("NPC Spawn");
 				_normals = new List<GameObject>();
 				_kegs = new List<GameObject>();
 
 				for(int i = 0; i < normalNPCCount; i++) {
 					Vector3 position = new Vector3();
-					position.x = Random.Range (-GameManager.HALF_WIDTH/2, GameManager.HALF_WIDTH/2);
-					position.y = Random.Range (-GameManager.HALF_HEIGHT/2, GameManager.HALF_HEIGHT/2);
+					position.x = Random.Range (spawn.collider2D.bounds.min.x, spawn.collider2D.bounds.max.x);
+					position.y = Random.Range (spawn.collider2D.bounds.min.y, spawn.collider2D.bounds.max.y);
 					position.z = position.y;
-					GameObject normal = Instantiate(normalNPC, position + _cameraPosition, Quaternion.identity) as GameObject;
+					GameObject normal = Instantiate(normalNPC, position, Quaternion.identity) as GameObject;
 					//normal.renderer.material.mainTexture = 
 					normal.GetComponent <SpriteRenderer>().sprite = GameManager.instance.possibleNPCTexture[Random.Range (0, GameManager.instance.possibleNPCTexture.Count-1)];
 					DontDestroyOnLoad(normal);
