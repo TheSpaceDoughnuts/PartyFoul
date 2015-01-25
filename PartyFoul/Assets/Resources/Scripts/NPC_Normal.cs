@@ -8,11 +8,20 @@ public class NPC_Normal : PartyPerson {
 	private bool _hasFun;
     private float _elapsedTime;
     private float _wanderProgress;
+    private float _beerElapsed;
+    private float _funElapsed;
+    private GameObject _beerTarget;
     private Object _beerIconRes;
+    private Object _funIconRes;
     private GameObject _beerIcon;
+    private GameObject _funIcon;
+    private GameObject _happyFace;
+    private GameObject _sadFace;
     //public
 	public float waitTargetTime = 1;
     public float wanderDistance = 0.5f;
+    public float beerDurationSec = 15;
+    public float funDurationSec = 10;
 
     protected override void OnStart()
     {
@@ -23,6 +32,18 @@ public class NPC_Normal : PartyPerson {
         _beerIcon.transform.SetParent(gameObject.transform);
         _beerIcon.transform.localPosition = Vector2.zero;
         _beerIcon.SetActive(false);
+
+        _funIconRes = Resources.Load("Prefabs/fun_icon");
+        _funIcon = (GameObject)Instantiate(_funIconRes);
+        _funIcon.transform.SetParent(gameObject.transform);
+        _funIcon.transform.localPosition = Vector2.zero;
+        _happyFace = _funIcon.transform.GetChild(0).gameObject;
+        _sadFace = _funIcon.transform.GetChild(1).gameObject;
+        _sadFace.SetActive(false);
+        _happyFace.SetActive(false);
+
+        _beerTarget = GameObject.Find("NPC");
+        Debug.Log("Target after beer: " + _beerTarget);
     }
 
 	protected override void OnUpdate ()
@@ -33,7 +54,17 @@ public class NPC_Normal : PartyPerson {
         //waited long enough and not already seeking a target
         bool waitedLongEnough = _elapsedTime > waitTargetTime;
 		if(waitedLongEnough && !_hasTarget){
-            Wander();
+            if (_hasBeer)
+            {
+                Mingle();
+            }
+            else
+            {
+                if (!_hasFun)
+                {
+                    Wander();
+                }
+            }
             _elapsedTime = 0;
         }
 
@@ -44,7 +75,21 @@ public class NPC_Normal : PartyPerson {
         }
         //order may be important, if we force arrival
         CalculateProgress();
+
+        EnjoyBeer();
+
+        EnjoyFun();
 	}
+
+    void BecomeBored()
+    {
+        if (_hasFun)
+        {
+            _hasFun = false;
+            _happyFace.SetActive(false);
+            //_sadFace.SetActive(true);
+        }
+    }
 
     void CalculateProgress()
     {
@@ -60,11 +105,67 @@ public class NPC_Normal : PartyPerson {
         _wanderProgress = 1 - (remainderLength / wanderDistance);
     }
 
+    void EnjoyFun()
+    {
+        if (_hasFun)
+        {
+            _funElapsed += Time.deltaTime;
+            if (_funElapsed > funDurationSec)
+            {
+                BecomeBored();
+            }
+        }
+    }
+
+    void EnjoyBeer()
+    {
+        if (_hasBeer)
+        {
+            _beerElapsed += Time.deltaTime;
+            if (_beerElapsed > beerDurationSec)
+            {
+                Debug.Log("Finished Beer Time!\n\n");
+                RelinquishBeer();
+            }
+        }
+    }
+
+    void HaveFun()
+    {
+        if (!_hasFun)
+        {
+            _hasFun = true;
+            _funElapsed = 0;
+            _happyFace.SetActive(true);
+            _sadFace.SetActive(false);
+        }
+    }
+
 	void ForceArrive()
 	{
         Vector2 currentPosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
 		SetTarget(currentPosition);
 	}
+
+    NPC_Normal GetScript(GameObject npc)
+    {
+        return npc.GetComponent<NPC_Normal>();
+    }
+
+    void Mingle()
+    {
+        if (_beerTarget != null)
+        {
+            NPC_Normal npc = GetScript(_beerTarget);
+            if (!npc.HasFun)
+            {
+                Vector2 dir = _beerTarget.transform.position - gameObject.transform.position;
+                float len = dir.magnitude;
+                dir.Normalize();
+                WanderTowards(dir, Mathf.Min(len, wanderDistance));
+            }
+        }
+    }
 
     void OnCollisionStay2D(Collision2D info)
     {
@@ -73,9 +174,19 @@ public class NPC_Normal : PartyPerson {
             //just so we dont jump to conclusions, wait a 100 milliseconds
             if (_elapsedTime > 0.1f)
                 ForceArrive();
-            if (info.gameObject.name == "Beer")
+        }
+        if (info.gameObject.name == "Beer")
+        {
+            RecieveBeer();
+        }
+        else if (info.gameObject.name == "NPC")
+        {
+            if (_hasBeer)
             {
-                RecieveBeer();
+                NPC_Normal buddy = GetScript(info.gameObject);
+                buddy.HaveFun();
+                HaveFun();
+                _beerTarget = info.gameObject;
             }
         }
     }
@@ -86,9 +197,19 @@ public class NPC_Normal : PartyPerson {
 			return;
 
         _hasBeer = true;
-		_hasFun = true;
+        HaveFun();
         _beerIcon.SetActive(true);
 		GameManager.instance.AddBeer (1);
+        _beerElapsed = 0;
+    }
+
+    void RelinquishBeer()
+    {
+        _hasBeer = false;
+        //Remove Beer from global beer reservoir
+        //GameManager.instance.AddBeer(-1);
+        _beerIcon.SetActive(false);
+        _beerElapsed = 0;
     }
 
     void ResetWaitTimer()
